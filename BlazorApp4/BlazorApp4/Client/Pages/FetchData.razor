@@ -1,0 +1,27 @@
+﻿@page "/fetchdata"
+@using BlazorApp4.Shared
+@inject HttpClient Http
+
+
+<p>It took @Time</p>
+<p>@ResponseString</p>
+
+@code {
+
+    public string? ResponseString { get; set; }
+    public string? Time { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stopwatch = new System.Diagnostics.Stopwatch();
+
+        stopwatch.Start();
+        var cake = await Http.GetAsync("https://httpbin.org/get");
+        ResponseString = await cake.Content.ReadAsStringAsync();
+        stopwatch.Stop();
+
+        Time = stopwatch.Elapsed.ToString();
+        StateHasChanged();
+
+    }
+}
